@@ -1,6 +1,9 @@
 name: _cache-cleanup
 
 # Reusable cleanup job shared by cache-cleanup.yml (manual) and cache-cleanup-pr.yml (PR close).
+permissions:
+  contents: read
+  actions: write
 
 on:
   workflow_call:
@@ -31,8 +34,8 @@ on:
         type: number
         default: 30
 
-permissions:
-  actions: write
+
+
 
 jobs:
   cleanup:
