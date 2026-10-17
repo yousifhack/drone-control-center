@@ -78,7 +78,7 @@ Rectangle {
 
         Label {
             width: parent.width
-            text: "Profile Inspector"
+            text: "Profile Inspector — action check"
             color: "white"
             font.bold: true
         }
@@ -135,8 +135,49 @@ Rectangle {
                         + " — " + accessory.verificationState
                 }).join("\n")
             }
+        } // End of the information Label
+
+        // This Repeater belongs to the main Column, not the Label.
+        Repeater {
+            model: root.profile ? root.profile.accessories : []
+
+            delegate: Column {
+                id: accessorySection
+                required property var modelData
+
+                width: content.width
+                spacing: 6
+
+        Label {
+                    width: parent.width
+                    text: accessorySection.modelData.displayName
+                    color: "white"
+                    font.bold: true
+                    wrapMode: Text.WordWrap
+                }
+
+                Repeater {
+                    model: accessorySection.modelData.actions || []
+
+                    delegate: Button {
+                        required property var modelData
+
+                        width: accessorySection.width
+                        text: modelData.displayName
+                        enabled: false
+                    }
+                }
+
+        Label {
+                    width: parent.width
+                    text: "Development profile: commands disabled.\n"
+                        + "Hardware mapping and verification required."
+                    color: "#FFD080"
+                    wrapMode: Text.WordWrap
+                }
+            }
         }
-    }
+    } // End of the main Column
 
     Component.onCompleted: loadProfile("basic-aircraft.json")
-}
+} // End of the Rectangle
