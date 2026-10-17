@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/control-center">
+        <file alias="VehicleStatusPanel.qml">qml/VehicleStatusPanel.qml</file>
+    </qresource>
+</RCC>

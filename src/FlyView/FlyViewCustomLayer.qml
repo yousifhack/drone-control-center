@@ -38,4 +38,15 @@ Item {
         bottomEdgeCenterInset:  parentToolInsets.bottomEdgeCenterInset
         bottomEdgeRightInset:   parentToolInsets.bottomEdgeRightInset
     }
+        // Our control-center panel, stored separately in custom/qml.
+    Loader {
+        id: vehicleStatusLoader
+
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.topMargin: 12
+
+        width: Math.max(0, Math.min(320, parent.width - 24))
+        source: "qrc:/control-center/VehicleStatusPanel.qml"
+    }
 }
