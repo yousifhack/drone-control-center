@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "profileId": "example-aircraft-with-gripper",
+  "displayName": "Aircraft with gripper — development example",
+  "developmentOnly": true,
+  "vehicleIdentity": null,
+  "expectedVehicleClass": "multirotor",
+  "accessories": [
+    {
+      "accessoryId": "cargo-gripper",
+      "type": "gripper",
+      "displayName": "Cargo gripper",
+      "verificationState": "unverified",
+      "actions": [
+        {
+          "actionId": "gripper.open",
+          "displayName": "Open gripper"
+        },
+        {
+          "actionId": "gripper.close",
+          "displayName": "Close gripper"
+        }
+      ],
+      "hardwareBinding": null,
+      "feedbackBinding": null
+    }
+  ]
+}

@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/control-center">
         <file alias="VehicleStatusPanel.qml">qml/VehicleStatusPanel.qml</file>
+        <file alias="ProfileInspector.qml">qml/ProfileInspector.qml</file>
+        <file alias="profiles/basic-aircraft.json">profiles/examples/basic-aircraft.json</file>
+        <file alias="profiles/aircraft-with-gripper.json">profiles/examples/aircraft-with-gripper.json</file>
     </qresource>
 </RCC>

@@ -38,15 +38,17 @@ Item {
         bottomEdgeCenterInset:  parentToolInsets.bottomEdgeCenterInset
         bottomEdgeRightInset:   parentToolInsets.bottomEdgeRightInset
     }
-        // Our control-center panel, stored separately in custom/qml.
+         // Temporary developer inspector, separate from vehicle controls.
     Loader {
-        id: vehicleStatusLoader
+        id: profileInspectorLoader
 
+        anchors.left: parent.left
         anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.leftMargin: parentToolInsets.leftEdgeTopInset + 12
         anchors.topMargin: 12
 
-        width: Math.max(0, Math.min(320, parent.width - 24))
-        source: "qrc:/control-center/VehicleStatusPanel.qml"
+        width: Math.max(0, Math.min(
+            340, parent.width - anchors.leftMargin - 12))
+        source: "qrc:/control-center/ProfileInspector.qml"
     }
 }

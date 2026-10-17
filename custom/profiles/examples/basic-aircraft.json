@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "profileId": "example-basic-aircraft",
+  "displayName": "Basic aircraft — development example",
+  "developmentOnly": true,
+  "vehicleIdentity": null,
+  "expectedVehicleClass": "multirotor",
+  "accessories": []
+}
