@@ -164,7 +164,51 @@ bool ProfileStore::loadExample(const QString& fileName)
     emit stateChanged();
     return true;
 }
+QVariantList ProfileStore::actions() const
+{
+    QVariantList catalog;
 
+    if (!loaded()) {
+        return catalog;
+    }
+
+    const QString profileId =
+        m_profile.value("profileId").toString();
+
+    const QVariantList accessories =
+        m_profile.value("accessories").toList();
+
+    for (const QVariant& accessoryValue : accessories) {
+        const QVariantMap accessory = accessoryValue.toMap();
+
+        const QVariantList declaredActions =
+            accessory.value("actions").toList();
+
+        for (const QVariant& actionValue : declaredActions) {
+            const QVariantMap declaredAction = actionValue.toMap();
+
+            QVariantMap entry;
+
+            entry.insert("profileId", profileId);
+            entry.insert("accessoryId", accessory.value("accessoryId"));
+            entry.insert("accessoryName", accessory.value("displayName"));
+            entry.insert("actionId", declaredAction.value("actionId"));
+            entry.insert("displayName", declaredAction.value("displayName"));
+
+            // These profiles are descriptions for development.
+            // They are not matched to a connected, verified vehicle.
+            entry.insert("executionAllowed", false);
+            entry.insert(
+                "blockedReason",
+                QStringLiteral(
+                    "Development profile; no verified hardware mapping."));
+
+            catalog.append(entry);
+        }
+    }
+
+    return catalog;
+}
 static void registerControlCenterTypes()
 {
     qmlRegisterSingletonType<ProfileStore>(

@@ -15,8 +15,6 @@ Rectangle {
     readonly property var profile:
         ProfileStore.loaded ? ProfileStore.profile : null
 
-    readonly property string loadError: ProfileStore.error
-
     function loadSelectedProfile() {
         const fileName = profileSelector.currentIndex === 0
             ? "basic-aircraft.json"
@@ -45,7 +43,7 @@ Rectangle {
 
         Label {
             width: parent.width
-            text: "Profile Inspector — shared store"
+            text: "Profile Inspector — action catalog"
             color: "white"
             font.bold: true
             wrapMode: Text.WordWrap
@@ -53,7 +51,7 @@ Rectangle {
 
         Label {
             width: parent.width
-            text: "Development data — no hardware commands"
+            text: "Development profiles — not a connected vehicle"
             color: "#FFD080"
             wrapMode: Text.WordWrap
         }
@@ -69,12 +67,12 @@ Rectangle {
 
         Label {
             width: parent.width
-            color: root.loadError ? "#FF9999" : "white"
+            color: ProfileStore.error ? "#FF9999" : "white"
             wrapMode: Text.WordWrap
 
             text: {
-                if (root.loadError)
-                    return "Profile error: " + root.loadError
+                if (ProfileStore.error)
+                    return "Profile error: " + ProfileStore.error
 
                 if (!root.profile)
                     return "No profile loaded"
@@ -89,64 +87,61 @@ Rectangle {
             wrapMode: Text.WordWrap
 
             text: root.profile
-                ? "Configured accessories: " + root.profile.accessories.length
+                ? "Configured accessories: "
+                    + root.profile.accessories.length
+                    + "\nDeclared accessory actions: "
+                    + ProfileStore.actions.length
                 : ""
         }
 
         Label {
             width: parent.width
+            visible: ProfileStore.loaded
+                && ProfileStore.actions.length === 0
+
+            text: "No accessory actions configured"
             color: "white"
             wrapMode: Text.WordWrap
-
-            visible: root.profile !== null
-                && root.profile.accessories.length === 0
-
-            text: "No configured accessories"
         }
 
         Repeater {
-            model: root.profile ? root.profile.accessories : []
+            model: ProfileStore.actions
 
             delegate: Column {
-                id: accessorySection
+                id: actionSection
 
                 required property var modelData
 
                 width: content.width
-                spacing: 6
+                spacing: 4
 
                 Label {
                     width: parent.width
-                    text: accessorySection.modelData.displayName
+                    text: actionSection.modelData.accessoryName
                     color: "white"
                     font.bold: true
                     wrapMode: Text.WordWrap
                 }
 
+                Button {
+                    width: parent.width
+                    text: actionSection.modelData.displayName
+
+                    // This inspector has no command dispatcher.
+                    enabled: false
+                }
+
                 Label {
                     width: parent.width
-                    text: "Verification: "
-                        + accessorySection.modelData.verificationState
-                    color: "#FFD080"
+                    text: "Action ID: "
+                        + actionSection.modelData.actionId
+                    color: "#B8C7D9"
                     wrapMode: Text.WordWrap
                 }
 
-                Repeater {
-                    model: accessorySection.modelData.actions
-
-                    delegate: Button {
-                        required property var modelData
-
-                        width: accessorySection.width
-                        text: modelData.displayName
-                        enabled: false
-                    }
-                }
-
                 Label {
                     width: parent.width
-                    text: "Commands disabled. Hardware mapping "
-                        + "and verification are required."
+                    text: actionSection.modelData.blockedReason
                     color: "#FFD080"
                     wrapMode: Text.WordWrap
                 }
