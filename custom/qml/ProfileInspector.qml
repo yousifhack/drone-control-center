@@ -1,75 +1,42 @@
 import QtQuick
 import QtQuick.Controls
+import Yousif.ControlCenter 1.0
 
 Rectangle {
     id: root
 
     implicitWidth: 340
     implicitHeight: content.implicitHeight + 24
+
     color: "#202833"
     border.color: "#536274"
     radius: 8
 
-    property var profile: null
-    property string loadError: ""
-    property bool loading: false
-    property int requestNumber: 0
+    readonly property var profile:
+        ProfileStore.loaded ? ProfileStore.profile : null
 
-    function loadProfile(fileName) {
-        const thisRequest = ++requestNumber
+    readonly property string loadError: ProfileStore.error
 
-        // Clear previous data immediately, so a failed load cannot
-        // leave another profile displayed as the selected one.
-        profile = null
-        loadError = ""
-        loading = true
+    function loadSelectedProfile() {
+        const fileName = profileSelector.currentIndex === 0
+            ? "basic-aircraft.json"
+            : "aircraft-with-gripper.json"
 
-        const request = new XMLHttpRequest()
-        request.open("GET", "qrc:/control-center/profiles/" + fileName)
-
-        request.onreadystatechange = function() {
-            if (request.readyState !== XMLHttpRequest.DONE)
-                return
-
-            // Ignore an older response if the selection has changed.
-            if (thisRequest !== requestNumber)
-                return
-
-            loading = false
-
-            try {
-                if (request.status !== 0 && request.status !== 200)
-                    throw new Error("Unable to read profile")
-
-                const data = JSON.parse(request.responseText)
-
-                if (!data || data.schemaVersion !== 1)
-                    throw new Error("Unsupported profile format")
-
-                if (data.developmentOnly !== true)
-                    throw new Error("Inspector accepts development profiles only")
-
-                if (typeof data.displayName !== "string"
-                        || !Array.isArray(data.accessories))
-                    throw new Error("Missing profile display information")
-
-                profile = data
-            } catch (error) {
-                loadError = String(error)
-            }
-        }
-
-        request.send()
+        ProfileStore.loadExample(fileName)
     }
 
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.AllButtons
-        onWheel: function(wheel) { wheel.accepted = true }
+
+        onWheel: function(wheel) {
+            wheel.accepted = true
+        }
     }
 
     Column {
         id: content
+
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
@@ -78,9 +45,10 @@ Rectangle {
 
         Label {
             width: parent.width
-            text: "Profile Inspector — action check"
+            text: "Profile Inspector — shared store"
             color: "white"
             font.bold: true
+            wrapMode: Text.WordWrap
         }
 
         Label {
@@ -91,64 +59,63 @@ Rectangle {
         }
 
         ComboBox {
+            id: profileSelector
+
             width: parent.width
             model: ["Basic aircraft", "Aircraft with gripper"]
 
-            onActivated: {
-                root.loadProfile(currentIndex === 0
-                    ? "basic-aircraft.json"
-                    : "aircraft-with-gripper.json")
-            }
+            onActivated: root.loadSelectedProfile()
         }
 
         Label {
             width: parent.width
-            wrapMode: Text.WordWrap
             color: root.loadError ? "#FF9999" : "white"
+            wrapMode: Text.WordWrap
 
             text: {
-                if (root.loading)
-                    return "Loading profile..."
                 if (root.loadError)
                     return "Profile error: " + root.loadError
+
                 if (!root.profile)
                     return "No profile loaded"
+
                 return root.profile.displayName
             }
         }
 
         Label {
             width: parent.width
+            color: "#B8C7D9"
             wrapMode: Text.WordWrap
+
+            text: root.profile
+                ? "Configured accessories: " + root.profile.accessories.length
+                : ""
+        }
+
+        Label {
+            width: parent.width
             color: "white"
+            wrapMode: Text.WordWrap
 
-            text: {
-                if (!root.profile)
-                    return ""
+            visible: root.profile !== null
+                && root.profile.accessories.length === 0
 
-                const accessories = root.profile.accessories
-                if (accessories.length === 0)
-                    return "No configured accessories"
+            text: "No configured accessories"
+        }
 
-                return accessories.map(function(accessory) {
-                    return accessory.displayName
-                        + " — " + accessory.verificationState
-                }).join("\n")
-            }
-        } // End of the information Label
-
-        // This Repeater belongs to the main Column, not the Label.
         Repeater {
             model: root.profile ? root.profile.accessories : []
 
             delegate: Column {
                 id: accessorySection
+
                 required property var modelData
 
                 width: content.width
                 spacing: 6
 
-        Label {
+                Label {
                     width: parent.width
                     text: accessorySection.modelData.displayName
                     color: "white"
@@ -156,8 +123,16 @@ Rectangle {
                     wrapMode: Text.WordWrap
                 }
 
+                Label {
+                    width: parent.width
+                    text: "Verification: "
+                        + accessorySection.modelData.verificationState
+                    color: "#FFD080"
+                    wrapMode: Text.WordWrap
+                }
+
                 Repeater {
-                    model: accessorySection.modelData.actions || []
+                    model: accessorySection.modelData.actions
 
                     delegate: Button {
                         required property var modelData
@@ -168,16 +143,16 @@ Rectangle {
                     }
                 }
 
-        Label {
+                Label {
                     width: parent.width
-                    text: "Development profile: commands disabled.\n"
-                        + "Hardware mapping and verification required."
+                    text: "Commands disabled. Hardware mapping "
+                        + "and verification are required."
                     color: "#FFD080"
                     wrapMode: Text.WordWrap
                 }
             }
         }
-    } // End of the main Column
+    }
 
-    Component.onCompleted: loadProfile("basic-aircraft.json")
-} // End of the Rectangle
+    Component.onCompleted: root.loadSelectedProfile()
+}

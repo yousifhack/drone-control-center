@@ -15,6 +15,7 @@ fi
 
 mkdir -p "$project_dir/notes"
 
-# The current Profile Inspector reads bundled JSON using XMLHttpRequest.
-# Enable local reads for this application process only.
-QML_XHR_ALLOW_FILE_READ=1 "$app_executable" 2>&1 | tee "$log_file"
+# Profiles are read by the C++ ProfileStore.
+"$app_executable" 2>&1 | tee "$log_file"
+
+
