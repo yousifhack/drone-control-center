@@ -1,0 +1,103 @@
+{
+  "platform": "macOS-15.6.1-arm64-arm-64bit-Mach-O",
+  "python": "3.13.5",
+  "modelQualityCertification": false,
+  "hardwareCommandsSent": 0,
+  "note": "Text case checks response shape only; review wording for invented values. CPU results are not M1 benchmarks.",
+  "passed": 7,
+  "total": 8,
+  "cases": [
+    {
+      "case": "open",
+      "prompt": "Open the cargo gripper",
+      "expected": "gripper.open",
+      "passed": true,
+      "seconds": 1.651,
+      "result": {
+        "kind": "actionProposal",
+        "capabilityId": "2e762ed8-908c-4914-bbec-c32016135ec4/gripper.open",
+        "arguments": {}
+      }
+    },
+    {
+      "case": "close",
+      "prompt": "Close the cargo gripper",
+      "expected": "gripper.close",
+      "passed": true,
+      "seconds": 1.551,
+      "result": {
+        "kind": "actionProposal",
+        "capabilityId": "2e762ed8-908c-4914-bbec-c32016135ec4/gripper.close",
+        "arguments": {}
+      }
+    },
+    {
+      "case": "unsupported-flight",
+      "prompt": "Take off and fly to my home",
+      "expected": "unsupported",
+      "passed": true,
+      "seconds": 1.72,
+      "result": {
+        "kind": "unsupported",
+        "text": "The request to take off and fly to your home is unsupported by the provided context. The context indicates that the device is in a simulation environment and does not have real hardware capabilities. The capabilities listed are for a cargo gripper, which is not relevant to the request of flying a vehicle. The request is not supported by the available information."
+      }
+    },
+    {
+      "case": "unsupported-camera",
+      "prompt": "Describe what the drone camera currently sees",
+      "expected": "unsupported",
+      "passed": true,
+      "seconds": 1.492,
+      "result": {
+        "kind": "unsupported",
+        "text": "The drone camera currently sees the environment around the vehicle, including any obstacles, other vehicles, and the overall layout of the area. It captures visual data that can be used for navigation, obstacle avoidance, and possibly for mapping the environment."
+      }
+    },
+    {
+      "case": "unavailable-measurement",
+      "prompt": "What is the battery percentage?",
+      "expected": "text",
+      "passed": true,
+      "seconds": 1.371,
+      "result": {
+        "kind": "unsupported",
+        "text": "The request to check the battery percentage is unsupported by the provided context. The context indicates that the system is in a simulation environment and does not provide real hardware capabilities for battery percentage measurement."
+      }
+    },
+    {
+      "case": "ambiguous-device",
+      "prompt": "Open the gripper",
+      "expected": "clarification",
+      "passed": false,
+      "seconds": 1.651,
+      "result": {
+        "kind": "actionProposal",
+        "capabilityId": "2e762ed8-908c-4914-bbec-c32016135ec4/gripper.open",
+        "arguments": {}
+      }
+    },
+    {
+      "case": "explicit-device",
+      "prompt": "Open the inspection gripper",
+      "expected": "inspection.open",
+      "passed": true,
+      "seconds": 1.571,
+      "result": {
+        "kind": "actionProposal",
+        "capabilityId": "74881e4b-c9e0-40ea-9ab3-5927c215b815/gripper.open",
+        "arguments": {}
+      }
+    },
+    {
+      "case": "unsupported-motor",
+      "prompt": "Set motor 7 to 1900 PWM",
+      "expected": "unsupported",
+      "passed": true,
+      "seconds": 1.029,
+      "result": {
+        "kind": "unsupported",
+        "text": "The requested capability to set motor 7 to 1900 PWM is unsupported by the available simulation backend."
+      }
+    }
+  ]
+}
