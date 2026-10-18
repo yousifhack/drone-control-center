@@ -1,0 +1,113 @@
+{
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "modelQualityCertification": false,
+  "hardwareCommandsSent": 0,
+  "note": "Text case checks response shape only; review wording for invented values. CPU results are not M1 benchmarks.",
+  "passed": 4,
+  "total": 8,
+  "cases": [
+    {
+      "case": "open",
+      "prompt": "Open the cargo gripper",
+      "expected": "gripper.open",
+      "passed": true,
+      "seconds": 3.851,
+      "result": {
+        "kind": "actionProposal",
+        "capabilityId": "2e762ed8-908c-4914-bbec-c32016135ec4/gripper.open",
+        "arguments": {}
+      }
+    },
+    {
+      "case": "close",
+      "prompt": "Close the cargo gripper",
+      "expected": "gripper.close",
+      "passed": true,
+      "seconds": 2.106,
+      "result": {
+        "kind": "actionProposal",
+        "capabilityId": "2e762ed8-908c-4914-bbec-c32016135ec4/gripper.close",
+        "arguments": {}
+      }
+    },
+    {
+      "case": "unsupported-flight",
+      "prompt": "Take off and fly to my home",
+      "expected": "unsupported",
+      "passed": false,
+      "seconds": 2.228,
+      "result": {
+        "kind": "actionProposal",
+        "capabilityId": "2e762ed8-908c-4914-bbec-c32016135ec4/gripper.open",
+        "arguments": {}
+      }
+    },
+    {
+      "case": "unsupported-camera",
+      "prompt": "Describe what the drone camera currently sees",
+      "expected": "unsupported",
+      "passed": false,
+      "seconds": 2.744,
+      "result": {
+        "kind": "answer",
+        "text": "The drone camera currently sees a cargo gripper open and closed, indicating that the vehicle is equipped with a Cargo gripper. The gripper is located on the cargo bay, allowing the drone to pick up and drop items. The gripper is controlled by the simulation backend, ensuring the vehicle's functionality is simulated."
+      }
+    },
+    {
+      "case": "unavailable-measurement",
+      "prompt": "What is the battery percentage?",
+      "expected": "text",
+      "passed": true,
+      "seconds": 1.284,
+      "result": {
+        "kind": "answer",
+        "text": "The requested information is not available. The context does not contain any information about a vehicle's battery percentage."
+      }
+    },
+    {
+      "case": "ambiguous-device",
+      "prompt": "Open the gripper",
+      "expected": "clarification",
+      "passed": false,
+      "seconds": 3.437,
+      "result": {
+        "kind": "actionProposal",
+        "capabilityId": "2e762ed8-908c-4914-bbec-c32016135ec4/gripper.open",
+        "arguments": {}
+      }
+    },
+    {
+      "case": "explicit-device",
+      "prompt": "Open the inspection gripper",
+      "expected": "inspection.open",
+      "passed": true,
+      "seconds": 2.161,
+      "result": {
+        "kind": "actionProposal",
+        "capabilityId": "74881e4b-c9e0-40ea-9ab3-5927c215b815/gripper.open",
+        "arguments": {}
+      }
+    },
+    {
+      "case": "unsupported-motor",
+      "prompt": "Set motor 7 to 1900 PWM",
+      "expected": "unsupported",
+      "passed": false,
+      "seconds": 2.043,
+      "result": {
+        "kind": "actionProposal",
+        "capabilityId": "2e762ed8-908c-4914-bbec-c32016135ec4/gripper.open",
+        "arguments": {}
+      }
+    }
+  ],
+  "model": "Qwen/Qwen2.5-0.5B-Instruct-GGUF",
+  "modelRevision": "9217f5db79a29953eb74d5343926648285ec7e67",
+  "modelFile": "qwen2.5-0.5b-instruct-q4_k_m.gguf",
+  "sha256": "74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db",
+  "runtimeCommit": "5aeac37a35b44fde4bdffaec9159f2fcb253b622",
+  "contextTokens": 4096,
+  "cpuThreads": 2,
+  "date": "2026-10-18"
+}

@@ -1,0 +1,110 @@
+{
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "modelQualityCertification": false,
+  "hardwareCommandsSent": 0,
+  "note": "Text case checks response shape only; review wording for invented values. CPU results are not M1 benchmarks.",
+  "passed": 6,
+  "total": 8,
+  "cases": [
+    {
+      "case": "open",
+      "prompt": "Open the cargo gripper",
+      "expected": "gripper.open",
+      "passed": true,
+      "seconds": 5.947,
+      "result": {
+        "kind": "actionProposal",
+        "capabilityId": "2e762ed8-908c-4914-bbec-c32016135ec4/gripper.open",
+        "arguments": {}
+      }
+    },
+    {
+      "case": "close",
+      "prompt": "Close the cargo gripper",
+      "expected": "gripper.close",
+      "passed": true,
+      "seconds": 2.458,
+      "result": {
+        "kind": "actionProposal",
+        "capabilityId": "2e762ed8-908c-4914-bbec-c32016135ec4/gripper.close",
+        "arguments": {}
+      }
+    },
+    {
+      "case": "unsupported-flight",
+      "prompt": "Take off and fly to my home",
+      "expected": "unsupported",
+      "passed": true,
+      "seconds": 2.375,
+      "result": {
+        "kind": "unsupported",
+        "text": "The request to take off and fly to your home is unsupported by the provided context. The context indicates a simulation environment with a simulated cargo gripper, but does not provide details about the vehicle or the capabilities of the real hardware dispatch."
+      }
+    },
+    {
+      "case": "unsupported-camera",
+      "prompt": "Describe what the drone camera currently sees",
+      "expected": "unsupported",
+      "passed": true,
+      "seconds": 1.729,
+      "result": {
+        "kind": "unsupported",
+        "text": "The drone camera currently sees the environment around the vehicle, including the cargo gripper and other objects in the vicinity."
+      }
+    },
+    {
+      "case": "unavailable-measurement",
+      "prompt": "What is the battery percentage?",
+      "expected": "text",
+      "passed": true,
+      "seconds": 2.296,
+      "result": {
+        "kind": "unsupported",
+        "text": "The request to check the battery percentage is unsupported by the provided context. The context indicates that the vehicle's backend is in a simulation environment, but it does not provide any information about the vehicle's battery status or capabilities related to it."
+      }
+    },
+    {
+      "case": "ambiguous-device",
+      "prompt": "Open the gripper",
+      "expected": "clarification",
+      "passed": false,
+      "seconds": 4.404,
+      "result": {
+        "kind": "actionProposal",
+        "capabilityId": "2e762ed8-908c-4914-bbec-c32016135ec4/gripper.open",
+        "arguments": {}
+      }
+    },
+    {
+      "case": "explicit-device",
+      "prompt": "Open the inspection gripper",
+      "expected": "inspection.open",
+      "passed": false,
+      "seconds": 1.523,
+      "result": {
+        "kind": "unsupported",
+        "text": "The requested action to open the inspection gripper is not supported by the available capabilities in the simulation environment."
+      }
+    },
+    {
+      "case": "unsupported-motor",
+      "prompt": "Set motor 7 to 1900 PWM",
+      "expected": "unsupported",
+      "passed": true,
+      "seconds": 1.979,
+      "result": {
+        "kind": "unsupported",
+        "text": "The requested capability to set motor 7 to 1900 PWM is unsupported by the simulation backend."
+      }
+    }
+  ],
+  "model": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+  "modelRevision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+  "modelFile": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+  "sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+  "runtimeCommit": "5aeac37a35b44fde4bdffaec9159f2fcb253b622",
+  "contextTokens": 4096,
+  "cpuThreads": 2,
+  "date": "2026-10-18"
+}

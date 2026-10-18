@@ -1,0 +1,62 @@
+name: YCC Foundation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['codex/ai-foundation']
+    paths: ['custom/**', '.github/workflows/ycc-foundation.yml']
+  pull_request:
+    paths: ['custom/**', '.github/workflows/ycc-foundation.yml']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ycc-foundation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  foundation:
+    name: Foundation / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            host: linux
+            arch: linux_gcc_64
+            archives: qtbase qtdeclarative icu
+          - os: macos-14
+            host: mac
+            arch: clang_64
+            archives: qtbase qtdeclarative
+          - os: windows-2022
+            host: windows
+            arch: win64_msvc2022_64
+            archives: qtbase qtdeclarative
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-python
+        with:
+          groups: qt
+          python-version: '3.13'
+      - uses: ./.github/actions/qt-install
+        with:
+          version: '6.11.1'
+          host: ${{ matrix.host }}
+          arch: ${{ matrix.arch }}
+          archives: ${{ matrix.archives }}
+          aqt-source: 'git+https://github.com/miurahr/aqtinstall.git@8d961e61720b3c06583517fbc68d57ec0a4e9f95'
+      - name: Configure
+        shell: bash
+        run: cmake -S custom/foundation -B foundation-build -DCMAKE_PREFIX_PATH="$QT_ROOT_DIR" -DCMAKE_BUILD_TYPE=Debug
+      - name: Build
+        run: cmake --build foundation-build --config Debug --parallel 2
+      - name: Test core and QML registration
+        run: ctest --test-dir foundation-build -C Debug --output-on-failure -L Unit
+      - name: Test Python worker
+        run: python -m unittest discover -s custom/tests -p "test_*.py" -v

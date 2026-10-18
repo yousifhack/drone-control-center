@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 2,
+  "profileId": "b6b19aee-7a39-4c2d-a54b-c84f760369ed",
+  "displayName": "Simulated cargo aircraft",
+  "revision": 0,
+  "backend": "simulation",
+  "devices": [
+    {
+      "deviceId": "2e762ed8-908c-4914-bbec-c32016135ec4",
+      "displayName": "Cargo gripper",
+      "type": "gripper",
+      "adapter": "sim.gripper.v1",
+      "binding": "f1a6d5a4-949f-4059-9ffb-e570ab857e20",
+      "unit": "normalized",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "openPosition": 0.9,
+      "closePosition": 0.1
+    }
+  ]
+}
