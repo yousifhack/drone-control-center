@@ -1,3 +1,53 @@
+# Yousif Control Center
+
+An experimental drone control interface built on [QGroundControl](https://github.com/mavlink/qgroundcontrol), exploring a shared command system for a desktop interface, an AI assistant, and future smart-glasses input.
+
+**Stage: prototype development.** The long-term goal is natural-language and visual assistance for drone operation. Cloud deployment, glasses control, and end-to-end AI flight execution are development goals, not demonstrated capabilities.
+
+## Project work in this repository
+
+The default branch, `yousif/control-center`, contains the custom interface and development-profile foundation:
+
+| Area | Repository evidence | Scope |
+| --- | --- | --- |
+| Custom interface | [QML components](custom/qml) | Operator interface customization |
+| Development profiles | [ProfileStore header](custom/src/ProfileStore.h), [implementation](custom/src/ProfileStore.cc), [example profiles](custom/profiles) | Profile loading and an exposed action catalog; a profile is not proof that hardware is connected |
+| Application integration | [Custom build configuration](custom/CMakeLists.txt), [resources](custom/custom.qrc) | Custom components within the QGroundControl codebase |
+| Architecture | [Component responsibilities and command rules](custom/docs/ARCHITECTURE.md) | Design reference; implementation status must be checked against the relevant branch |
+| Development tooling | [Custom tools](custom/tools) | Supporting development scripts |
+
+These links identify existing source work, not a claim that every component has been tested on a physical aircraft. QGroundControl supplies the underlying ground-station functionality; this project's contribution is the custom layer.
+
+## Next milestone: one traceable command in simulation
+
+The next integration target is a request that can be followed from operator input to a recorded simulator outcome.
+
+- [ ] Define a versioned request format with request ID, vehicle ID, action, arguments, timestamp, and expiry.
+- [ ] Route desktop and AI requests through the same command coordinator.
+- [ ] Reject unsupported actions, invalid arguments, expired requests, and requests for the wrong vehicle.
+- [ ] Connect the coordinator to one selected autopilot simulator and document the setup.
+- [ ] Record request receipt, validation, dispatch, acknowledgment, and observed completion separately.
+- [ ] Demonstrate a supported request and rejection cases, with reproducible instructions and logs.
+- [ ] Measure end-to-end latency before making responsiveness claims.
+
+## Cloud and glasses integration plan
+
+Keep AI processing behind a defined service interface so local and cloud execution can be evaluated without redesigning the operator interface. Separate the development environment from the service's runtime deployment.
+
+A future glasses adapter should submit the same structured requests as the desktop interface. Direct device access, phone mediation, display access, and gesture input remain to be verified with the actual hardware and available interfaces. A cloud service also needs a defined connection to the vehicle-side communication gateway.
+
+Flight stabilization and link-loss behavior remain the autopilot's responsibility. AI output is a proposed action that must pass validation; it is not executable code.
+
+## Progress note — 2026-10-29
+
+This update makes the project scope, existing source components, and next integration milestone visible from the repository front page. It is a documentation milestone; no new flight, cloud, or glasses capability is claimed.
+
+---
+
+## Upstream QGroundControl
+
+The original upstream overview follows. Its downloads, badges, and feature descriptions refer to QGroundControl, not a packaged release of Yousif Control Center.
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/Dronecode/UX-Design/35d8148a8a0559cd4bcf50bfa2c94614983cce91/QGC/Branding/Deliverables/QGC_RGB_Logo_Horizontal_Positive_PREFERRED/QGC_RGB_Logo_Horizontal_Positive_PREFERRED.svg" alt="QGroundControl Logo" width="500">
 </p>
@@ -61,3 +111,4 @@ QGC's interface is translated by the community — help translate it into your l
 ## Star history
 
 [![Star History Chart](https://api.star-history.com/svg?repos=mavlink/qgroundcontrol&type=Date)](https://star-history.com/#mavlink/qgroundcontrol&Date)
+
