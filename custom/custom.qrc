@@ -4,5 +4,6 @@
         <file alias="ProfileInspector.qml">qml/ProfileInspector.qml</file>
         <file alias="profiles/basic-aircraft.json">profiles/examples/basic-aircraft.json</file>
         <file alias="profiles/aircraft-with-gripper.json">profiles/examples/aircraft-with-gripper.json</file>
+        <file alias="ProfileSettingsDialog.qml">qml/ProfileSettingsDialog.qml</file>
     </qresource>
 </RCC>

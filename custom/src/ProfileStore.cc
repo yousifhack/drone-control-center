@@ -1,3 +1,4 @@
+#include "ProfilePreferences.h"
 #include "ProfileStore.h"
 
 #include <QCoreApplication>
@@ -215,6 +216,12 @@ static void registerControlCenterTypes()
         "Yousif.ControlCenter", 1, 0, "ProfileStore",
         [](QQmlEngine*, QJSEngine*) -> QObject* {
             return new ProfileStore;
+        });
+
+    qmlRegisterSingletonType<ProfilePreferences>(
+        "Yousif.ControlCenter", 1, 0, "ProfilePreferences",
+        [](QQmlEngine*, QJSEngine*) -> QObject* {
+            return new ProfilePreferences;
         });
 }
 

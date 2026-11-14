@@ -23,6 +23,28 @@ Rectangle {
         ProfileStore.loadExample(fileName)
     }
 
+    readonly property var preferences: {
+        // Re-evaluate when any profile preference is saved.
+        const revision = ProfilePreferences.revision
+
+        if (!root.profile) {
+            return {
+                displayName: "",
+                showAccessoryControls: true,
+                error: ""
+            }
+        }
+
+        return ProfilePreferences.read(root.profile.profileId)
+    }
+
+
+
+    ProfileSettingsDialog {
+        id: settingsDialog
+        parent: Overlay.overlay
+    }
+
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.AllButtons
@@ -52,7 +74,7 @@ Rectangle {
         Label {
             width: parent.width
             text: "Development profiles — not a connected vehicle"
-            color: "#FFD080"
+            color: '#ffd980'
             wrapMode: Text.WordWrap
         }
 
@@ -63,6 +85,26 @@ Rectangle {
             model: ["Basic aircraft", "Aircraft with gripper"]
 
             onActivated: root.loadSelectedProfile()
+        }
+
+        Button {
+            width: parent.width
+            text: "Profile settings"
+            enabled: ProfileStore.loaded
+
+            onClicked: {
+                settingsDialog.profileId = root.profile.profileId
+                settingsDialog.defaultDisplayName = root.profile.displayName
+                settingsDialog.open()
+            }
+        }
+
+        Label {
+            width: parent.width
+            visible: root.preferences.error.length > 0
+            text: root.preferences.error
+            color: "#FF7777"
+            wrapMode: Text.WordWrap
         }
 
         Label {
@@ -77,7 +119,9 @@ Rectangle {
                 if (!root.profile)
                     return "No profile loaded"
 
-                return root.profile.displayName
+                return root.preferences.displayName.length > 0
+                    ? root.preferences.displayName
+                    : root.profile.displayName
             }
         }
 
@@ -104,8 +148,24 @@ Rectangle {
             wrapMode: Text.WordWrap
         }
 
+        Label {
+            width: parent.width
+
+            visible: ProfileStore.loaded
+                && ProfileStore.actions.length > 0
+                && !root.preferences.showAccessoryControls
+
+            text: "Accessory controls are hidden. "
+                + "Enable them in Profile settings."
+
+            color: "#FFD080"
+            wrapMode: Text.WordWrap
+        }
+
         Repeater {
-            model: ProfileStore.actions
+            model: root.preferences.showAccessoryControls
+                ? ProfileStore.actions
+                : []
 
             delegate: Column {
                 id: actionSection
