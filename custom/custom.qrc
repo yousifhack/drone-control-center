@@ -5,5 +5,7 @@
         <file alias="profiles/basic-aircraft.json">profiles/examples/basic-aircraft.json</file>
         <file alias="profiles/aircraft-with-gripper.json">profiles/examples/aircraft-with-gripper.json</file>
         <file alias="ProfileSettingsDialog.qml">qml/ProfileSettingsDialog.qml</file>
+            <file alias="IntelligenceBridge.qml">qml/IntelligenceBridge.qml</file>
+        <file alias="IntelligencePanel.qml">qml/IntelligencePanel.qml</file>
     </qresource>
 </RCC>

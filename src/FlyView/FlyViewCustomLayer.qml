@@ -38,7 +38,7 @@ Item {
         bottomEdgeCenterInset:  parentToolInsets.bottomEdgeCenterInset
         bottomEdgeRightInset:   parentToolInsets.bottomEdgeRightInset
     }
-         // Temporary developer inspector, separate from vehicle controls.
+    // Existing profile inspector.
     Loader {
         id: profileInspectorLoader
 
@@ -49,6 +49,23 @@ Item {
 
         width: Math.max(0, Math.min(
             340, parent.width - anchors.leftMargin - 12))
+
         source: "qrc:/control-center/ProfileInspector.qml"
+    }
+
+    // Intelligence panel and chat.
+    Loader {
+        id: intelligencePanelLoader
+
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.rightMargin: parentToolInsets.rightEdgeTopInset + 12
+        anchors.topMargin: 12
+
+        width: Math.max(0, Math.min(
+            380, parent.width - anchors.rightMargin - 12))
+        height: Math.max(0, Math.min(500, parent.height - 24))
+
+        source: "qrc:/control-center/IntelligencePanel.qml"
     }
 }
