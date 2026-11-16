@@ -63,9 +63,12 @@ Item {
         anchors.topMargin: 12
 
         width: Math.max(0, Math.min(
-            380, parent.width - anchors.rightMargin - 12))
-        height: Math.max(0, Math.min(500, parent.height - 24))
+            ScreenTools.defaultFontPixelWidth * 62,
+            parent.width - anchors.rightMargin - 12))
+        height: Math.max(0, Math.min(
+            ScreenTools.defaultFontPixelHeight * 34, parent.height - 24))
 
         source: "qrc:/control-center/IntelligencePanel.qml"
     }
 }
+

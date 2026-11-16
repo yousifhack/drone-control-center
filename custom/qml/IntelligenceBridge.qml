@@ -18,6 +18,14 @@ Item {
     property int sequence: 0
     property double statusSentAt: 0
     property double chatSentAt: 0
+    property string cameraState: "unavailable"
+    property double observationTime: 0
+    property double clock: Date.now()
+    property var objects: []
+    property var advisories: []
+    readonly property bool cameraLive: connected && cameraState === "live"
+        && clock / 1000 - observationTime >= 0
+        && clock / 1000 - observationTime <= 3
 
     signal chatMessage(string speaker, string message)
 
@@ -55,6 +63,7 @@ Item {
 
         const current = vehicle
         const live = current !== null && current !== undefined
+            && current.vehicleLinkManager
             && !current.vehicleLinkManager.communicationLost
 
         statusRequest = nextId("status")
@@ -88,7 +97,7 @@ Item {
         url: root.endpoint
         active: true
 
-        onStatusChanged: {
+        onStatusChanged: function(status) {
             if (status === WebSocket.Open) {
                 root.connectionState = "Connected to Python"
                 root.statusRequest = ""
@@ -120,6 +129,24 @@ Item {
 
             if (!reply || reply.version !== 1)
                 return
+
+            if (reply.type === "perception_update"
+                    && typeof reply.camera_state === "string"
+                    && Array.isArray(reply.objects)
+                    && Array.isArray(reply.advisories)) {
+                root.cameraState = reply.camera_state
+                root.observationTime = typeof reply.updated_at_unix === "number"
+                    ? reply.updated_at_unix : 0
+                root.clock = Date.now()
+                root.objects = reply.objects.slice(0, 100)
+                root.advisories = reply.advisories.slice(0, 10)
+                return
+            }
+
+            if (reply.type === "recording_error" && typeof reply.message === "string") {
+                root.chatMessage("System", reply.message)
+                return
+            }
 
             if (reply.type === "panel_update"
                     && root.statusRequest !== ""
@@ -158,6 +185,7 @@ Item {
 
         onTriggered: {
             const now = Date.now()
+            root.clock = now
 
             if (root.chatRequest !== ""
                     && now - root.chatSentAt > 60000) {
@@ -178,3 +206,4 @@ Item {
         }
     }
 }
+
